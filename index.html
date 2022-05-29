@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Gif Display</title>
+  </head>
+
+  <body>
+    <div class="content">
+      <div class="searchBar">
+        <input type="text" placeholder="Enter search term" />
+        <button>Search</button>
+      </div>
+      <img src="#" />
+    </div>
+
+    <script>
+      const img = document.querySelector('img');
+      const btn = document.querySelector('button');
+      const input = document.querySelector('input');
+      fetch(
+        `https://api.giphy.com/v1/gifs/translate?api_key=irOt2ORuei6NnwK8s81omh1DwyWOWDQc&s=random`,
+        { mode: 'cors' }
+      )
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          img.src = response.data.images.original.url;
+        });
+      btn.addEventListener('click', () => {
+        if (input.value === '') return;
+        fetch(
+          `https://api.giphy.com/v1/gifs/translate?api_key=irOt2ORuei6NnwK8s81omh1DwyWOWDQc&s=${input.value}`,
+          { mode: 'cors' }
+        )
+          .then((response) => {
+            return response.json();
+          })
+          .then((response) => {
+            img.src = response.data.images.original.url;
+          })
+          .catch(() => {
+            console.log('No gifs available');
+          });
+      });
+    </script>
+  </body>
+</html>
