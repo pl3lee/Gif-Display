@@ -21,32 +21,19 @@
       const img = document.querySelector('img');
       const btn = document.querySelector('button');
       const input = document.querySelector('input');
-      fetch(
-        `https://api.giphy.com/v1/gifs/translate?api_key=irOt2ORuei6NnwK8s81omh1DwyWOWDQc&s=random`,
-        { mode: 'cors' }
-      )
-        .then((response) => {
-          return response.json();
-        })
-        .then((response) => {
-          img.src = response.data.images.original.url;
-        });
-      btn.addEventListener('click', () => {
-        if (input.value === '') return;
-        fetch(
-          `https://api.giphy.com/v1/gifs/translate?api_key=irOt2ORuei6NnwK8s81omh1DwyWOWDQc&s=${input.value}`,
+      async function fetchGif(searchTerm) {
+        if (searchTerm === '') {
+          searchTerm = 'random';
+        }
+        const response = await fetch(
+          `https://api.giphy.com/v1/gifs/translate?api_key=irOt2ORuei6NnwK8s81omh1DwyWOWDQc&s=${searchTerm}`,
           { mode: 'cors' }
-        )
-          .then((response) => {
-            return response.json();
-          })
-          .then((response) => {
-            img.src = response.data.images.original.url;
-          })
-          .catch(() => {
-            console.log('No gifs available');
-          });
-      });
+        );
+        const gifData = await response.json();
+        img.src = gifData.data.images.original.url;
+      }
+      fetchGif('');
+      btn.addEventListener('click', fetchGif(input.value));
     </script>
   </body>
 </html>
